@@ -2,7 +2,7 @@
    "name": "large-comments",
    "displayName": "Large Comments",
    "description": "Large comments generator",
-   "version": "0.0.1",
+   "version": "0.0.2",
    "engines": {
       "vscode": "^1.58.0"
    },
@@ -34,7 +34,11 @@
       "url": "git+https://github.com/elgs/large-comments.git"
    },
    "scripts": {
-      "vscode:prepublish": "npm run compile",
+      "vscode:prepublish": "npm run -S esbuild-base -- --minify",
+      "esbuild-base": "esbuild ./src/extension.ts --bundle --outfile=out/main.js --external:vscode --format=cjs --platform=node",
+      "esbuild": "npm run -S esbuild-base -- --sourcemap",
+      "esbuild-watch": "npm run -S esbuild-base -- --sourcemap --watch",
+      "test-compile": "tsc -p ./",
       "compile": "tsc -p ./",
       "watch": "tsc -watch -p ./",
       "pretest": "npm run compile && npm run lint",
@@ -48,6 +52,7 @@
       "@types/vscode": "^1.58.0",
       "@typescript-eslint/eslint-plugin": "^4.26.0",
       "@typescript-eslint/parser": "^4.26.0",
+      "esbuild": "^0.12.15",
       "eslint": "^7.27.0",
       "glob": "^7.1.7",
       "mocha": "^8.4.0",
