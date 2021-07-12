@@ -2,12 +2,13 @@
    "name": "large-comments",
    "displayName": "Large Comments",
    "description": "Large comments generator",
-   "version": "0.0.2",
+   "version": "0.0.3",
    "engines": {
       "vscode": "^1.58.0"
    },
    "categories": [
-      "Other"
+      "Programming Languages",
+      "Snippets"
    ],
    "activationEvents": [
       "onCommand:large-comments.large-comments"
@@ -29,6 +30,11 @@
       ]
    },
    "publisher": "elgs",
+   "keywords": [
+      "comments",
+      "ascii",
+      "art"
+   ],
    "repository": {
       "type": "git",
       "url": "git+https://github.com/elgs/large-comments.git"
