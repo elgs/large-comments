@@ -29,6 +29,10 @@
       ]
    },
    "publisher": "elgs",
+   "repository": {
+      "type": "git",
+      "url": "git+https://github.com/elgs/large-comments.git"
+   },
    "scripts": {
       "vscode:prepublish": "npm run compile",
       "compile": "tsc -p ./",
