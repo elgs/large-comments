@@ -11,9 +11,9 @@ export function activate(context: vscode.ExtensionContext) {
       let selection: vscode.Range;
       if (editor?.selection.isEmpty) {
          // cursor
-         const currentLine = editor?.selection.active.line;
-         text = editor?.document.lineAt(currentLine).text;
-         selection = new vscode.Range(currentLine, 0, currentLine, text?.length);
+         const activeLine = editor?.document.lineAt(editor?.selection.active.line);
+         text = activeLine.text;
+         selection = activeLine.range;
       } else {
          // selected some text
          selection = editor?.selection!;
@@ -66,6 +66,7 @@ export function activate(context: vscode.ExtensionContext) {
          case 'r':
          case 'shellscript':
          case 'yaml':
+         case 'ruby':
             addComment = (text: string) => {
                let ret = '#'.repeat(commentLength + 4) + '\n';
                text.split('\n').map((line: string) => {
