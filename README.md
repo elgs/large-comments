@@ -1,3 +1,3 @@
 # large-comments README
 
-This extension helps to generate large blocks of comments.
+A VS Code extension that generates large blocks of comments.
