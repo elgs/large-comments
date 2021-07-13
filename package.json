@@ -37,8 +37,9 @@
    ],
    "repository": {
       "type": "git",
-      "url": "git+https://github.com/elgs/large-comments.git"
+      "url": "https://github.com/elgs/large-comments/"
    },
+   "icon": "images/icon.png",
    "scripts": {
       "vscode:prepublish": "npm run -S esbuild-base -- --minify",
       "esbuild-base": "esbuild ./src/extension.ts --bundle --outfile=out/main.js --external:vscode --format=cjs --platform=node",
