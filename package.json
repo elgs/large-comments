@@ -2,7 +2,7 @@
    "name": "large-comments",
    "displayName": "Large Comments",
    "description": "Large comments generator",
-   "version": "0.0.4",
+   "version": "0.0.5",
    "engines": {
       "vscode": "^1.58.0"
    },
@@ -56,7 +56,7 @@
       "@types/glob": "^7.1.4",
       "@types/mocha": "^8.2.3",
       "@types/node": "16.x",
-      "@types/vscode": "^1.58.0",
+      "@types/vscode": "^1.58.1",
       "@typescript-eslint/eslint-plugin": "^4.28.3",
       "@typescript-eslint/parser": "^4.28.3",
       "esbuild": "^0.12.15",
