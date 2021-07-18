@@ -1,21 +1,24 @@
 import * as vscode from 'vscode';
 const figlet = require('figlet');
 
-const font = 'Big Money-sw';
-const paddingLeft = 0;
-const paddingRight = 0;
-const paddingTop = 0;
-let paddingBottom = 0;
 
 export function activate(context: vscode.ExtensionContext) {
 
-   const paddingLeftSpaces = ' '.repeat(paddingLeft);
-   const paddingRightSpaces = ' '.repeat(paddingRight);
-
    const generateComments = (enlarge: boolean) => {
 
+      const config = vscode.workspace.getConfiguration('largeComments');
+
+      const font = config.font;
+      let defaultPaddingLeft = config.paddings.left;
+      let defaultPaddingRight = config.paddings.right;
+      let defaultPaddingTop = config.paddings.top;
+      let defaultPaddingBottom = config.paddings.bottom;
+
+      const paddingLeftSpaces = ' '.repeat(defaultPaddingLeft);
+      const paddingRightSpaces = ' '.repeat(defaultPaddingRight);
+
       if (enlarge) {
-         ++paddingBottom;
+         ++defaultPaddingBottom;
       }
 
       const editor = vscode.window.activeTextEditor;
@@ -75,17 +78,17 @@ export function activate(context: vscode.ExtensionContext) {
          case 'swift':
          case 'typescript':
             addComment = (text: string) => {
-               let ret = leadingSpaces + '/'.repeat(commentLength + 6 + paddingLeft + paddingRight) + '\n';
-               for (let i = 0; i < paddingTop; ++i) {
-                  ret += leadingSpaces + '//' + ' '.repeat(commentLength + 2 + paddingLeft + paddingRight) + '//\n';
+               let ret = leadingSpaces + '/'.repeat(commentLength + 6 + defaultPaddingLeft + defaultPaddingRight) + '\n';
+               for (let i = 0; i < defaultPaddingTop; ++i) {
+                  ret += leadingSpaces + '//' + ' '.repeat(commentLength + 2 + defaultPaddingLeft + defaultPaddingRight) + '//\n';
                }
                text.split('\n').map((line: string) => {
                   ret += leadingSpaces + '// ' + paddingLeftSpaces + line + paddingRightSpaces + ' //\n';
                });
-               for (let i = 0; i < paddingBottom; ++i) {
-                  ret += leadingSpaces + '//' + ' '.repeat(commentLength + 2 + paddingLeft + paddingRight) + '//\n';
+               for (let i = 0; i < defaultPaddingBottom; ++i) {
+                  ret += leadingSpaces + '//' + ' '.repeat(commentLength + 2 + defaultPaddingLeft + defaultPaddingRight) + '//\n';
                }
-               ret += leadingSpaces + '/'.repeat(commentLength + 6 + paddingLeft + paddingRight) + '\n';
+               ret += leadingSpaces + '/'.repeat(commentLength + 6 + defaultPaddingLeft + defaultPaddingRight) + '\n';
                return ret;
             }
             break;
@@ -101,17 +104,17 @@ export function activate(context: vscode.ExtensionContext) {
          case 'yaml':
          case 'ruby':
             addComment = (text: string) => {
-               let ret = leadingSpaces + '#'.repeat(commentLength + 4 + paddingLeft + paddingRight) + '\n';
-               for (let i = 0; i < paddingTop; ++i) {
-                  ret += leadingSpaces + '#' + ' '.repeat(commentLength + 2 + paddingLeft + paddingRight) + '#\n';
+               let ret = leadingSpaces + '#'.repeat(commentLength + 4 + defaultPaddingLeft + defaultPaddingRight) + '\n';
+               for (let i = 0; i < defaultPaddingTop; ++i) {
+                  ret += leadingSpaces + '#' + ' '.repeat(commentLength + 2 + defaultPaddingLeft + defaultPaddingRight) + '#\n';
                }
                text.split('\n').map((line: string) => {
                   ret += leadingSpaces + '# ' + paddingLeftSpaces + line + paddingRightSpaces + ' #\n';
                });
-               for (let i = 0; i < paddingBottom; ++i) {
-                  ret += leadingSpaces + '#' + ' '.repeat(commentLength + 2 + paddingLeft + paddingRight) + '#\n';
+               for (let i = 0; i < defaultPaddingBottom; ++i) {
+                  ret += leadingSpaces + '#' + ' '.repeat(commentLength + 2 + defaultPaddingLeft + defaultPaddingRight) + '#\n';
                }
-               ret += leadingSpaces + '#'.repeat(commentLength + 4 + paddingLeft + paddingRight) + '\n';
+               ret += leadingSpaces + '#'.repeat(commentLength + 4 + defaultPaddingLeft + defaultPaddingRight) + '\n';
                return ret;
             }
             break;
@@ -119,17 +122,17 @@ export function activate(context: vscode.ExtensionContext) {
          case 'markdown':
          case 'xml':
             addComment = (text: string) => {
-               let ret = leadingSpaces + '<!-- ' + '-'.repeat(commentLength + paddingLeft + paddingRight) + '\n';
-               for (let i = 0; i < paddingTop; ++i) {
-                  ret += leadingSpaces + ' -' + ' '.repeat(commentLength + 2 + paddingLeft + paddingRight) + '-\n';
+               let ret = leadingSpaces + '<!-- ' + '-'.repeat(commentLength + defaultPaddingLeft + defaultPaddingRight) + '\n';
+               for (let i = 0; i < defaultPaddingTop; ++i) {
+                  ret += leadingSpaces + ' -' + ' '.repeat(commentLength + 2 + defaultPaddingLeft + defaultPaddingRight) + '-\n';
                }
                text.split('\n').map((line: string) => {
                   ret += leadingSpaces + ' - ' + paddingLeftSpaces + line + paddingRightSpaces + ' -\n';
                });
-               for (let i = 0; i < paddingBottom; ++i) {
-                  ret += leadingSpaces + ' -' + ' '.repeat(commentLength + 2 + paddingLeft + paddingRight) + '-\n';
+               for (let i = 0; i < defaultPaddingBottom; ++i) {
+                  ret += leadingSpaces + ' -' + ' '.repeat(commentLength + 2 + defaultPaddingLeft + defaultPaddingRight) + '-\n';
                }
-               ret += leadingSpaces + ' ' + '-'.repeat(commentLength + paddingLeft + paddingRight) + ' -->\n';
+               ret += leadingSpaces + ' ' + '-'.repeat(commentLength + defaultPaddingLeft + defaultPaddingRight) + ' -->\n';
                return ret;
             }
             break;
@@ -137,33 +140,33 @@ export function activate(context: vscode.ExtensionContext) {
          case 'scss':
          case 'sass':
             addComment = (text: string) => {
-               let ret = leadingSpaces + '/*' + '*'.repeat(commentLength + 3 + paddingLeft + paddingRight) + '\n';
-               for (let i = 0; i < paddingTop; ++i) {
-                  ret += leadingSpaces + ' *' + ' '.repeat(commentLength + 2 + paddingLeft + paddingRight) + '*\n';
+               let ret = leadingSpaces + '/*' + '*'.repeat(commentLength + 3 + defaultPaddingLeft + defaultPaddingRight) + '\n';
+               for (let i = 0; i < defaultPaddingTop; ++i) {
+                  ret += leadingSpaces + ' *' + ' '.repeat(commentLength + 2 + defaultPaddingLeft + defaultPaddingRight) + '*\n';
                }
                text.split('\n').map((line: string) => {
                   ret += leadingSpaces + ' * ' + paddingLeftSpaces + line + paddingRightSpaces + ' *\n';
                });
-               for (let i = 0; i < paddingBottom; ++i) {
-                  ret += leadingSpaces + ' *' + ' '.repeat(commentLength + 2 + paddingLeft + paddingRight) + '*\n';
+               for (let i = 0; i < defaultPaddingBottom; ++i) {
+                  ret += leadingSpaces + ' *' + ' '.repeat(commentLength + 2 + defaultPaddingLeft + defaultPaddingRight) + '*\n';
                }
-               ret += leadingSpaces + ' ' + '*'.repeat(commentLength + 4 + paddingLeft + paddingRight) + '/\n';
+               ret += leadingSpaces + ' ' + '*'.repeat(commentLength + 4 + defaultPaddingLeft + defaultPaddingRight) + '/\n';
                return ret;
             }
             break;
          case 'sql':
             addComment = (text: string) => {
-               let ret = leadingSpaces + '-'.repeat(commentLength + 6 + paddingLeft + paddingRight) + '\n';
-               for (let i = 0; i < paddingTop; ++i) {
-                  ret += leadingSpaces + '--' + ' '.repeat(commentLength + 2 + paddingLeft + paddingRight) + '--\n';
+               let ret = leadingSpaces + '-'.repeat(commentLength + 6 + defaultPaddingLeft + defaultPaddingRight) + '\n';
+               for (let i = 0; i < defaultPaddingTop; ++i) {
+                  ret += leadingSpaces + '--' + ' '.repeat(commentLength + 2 + defaultPaddingLeft + defaultPaddingRight) + '--\n';
                }
                text.split('\n').map((line: string) => {
                   ret += leadingSpaces + '-- ' + paddingLeftSpaces + line + paddingRightSpaces + ' --\n';
                });
-               for (let i = 0; i < paddingBottom; ++i) {
-                  ret += leadingSpaces + '--' + ' '.repeat(commentLength + 2 + paddingLeft + paddingRight) + '--\n';
+               for (let i = 0; i < defaultPaddingBottom; ++i) {
+                  ret += leadingSpaces + '--' + ' '.repeat(commentLength + 2 + defaultPaddingLeft + defaultPaddingRight) + '--\n';
                }
-               ret += leadingSpaces + '-'.repeat(commentLength + 6 + paddingLeft + paddingRight) + '\n';
+               ret += leadingSpaces + '-'.repeat(commentLength + 6 + defaultPaddingLeft + defaultPaddingRight) + '\n';
                return ret;
             }
             break;
