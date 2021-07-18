@@ -2,7 +2,7 @@
    "name": "large-comments",
    "displayName": "Large Comments",
    "description": "Large comments generator",
-   "version": "0.0.6",
+   "version": "0.0.7",
    "engines": {
       "vscode": "^1.58.1"
    },
@@ -35,7 +35,7 @@
          {
             "command": "large-comments.large-comments",
             "key": "ctrl+alt+shift+/",
-            "mac": "cmd+alt+shift+/"
+            "mac": "cmd+ctrl+shift+/"
          }
       ],
       "configuration": {
