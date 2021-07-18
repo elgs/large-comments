@@ -1,13 +1,23 @@
 import * as vscode from 'vscode';
 const figlet = require('figlet');
 
+const enlarge = true;
+const font = 'Big Money-sw';
+const paddingLeft = 0;
+const paddingRight = 0;
+const paddingTop = 0;
+const paddingBottom = 0;
+
 export function activate(context: vscode.ExtensionContext) {
+
+   const paddingLeftSpaces = ' '.repeat(paddingLeft);
+   const paddingRightSpaces = ' '.repeat(paddingRight);
 
    let disposable = vscode.commands.registerCommand('large-comments.large-comments', () => {
 
       const editor = vscode.window.activeTextEditor;
 
-      let text: string;
+      let text: string = '';
       let selection: vscode.Range;
       if (editor?.selection.isEmpty) {
          // cursor
@@ -16,13 +26,28 @@ export function activate(context: vscode.ExtensionContext) {
          selection = activeLine.range;
       } else {
          // selected some text
-         selection = editor?.selection!;
-         text = editor?.document.getText(selection)!;
+         const startPosition = editor?.selection.start.with({ character: 0 });
+         const endPosition = editor?.selection.end.with({ character: editor.document.lineAt(editor.selection.end.line).text.length });
+         selection = editor?.selection.with(startPosition, endPosition)!;
+         for (let i = selection.start.line; i <= selection.end.line; ++i) {
+            text += editor?.document.getText(editor.document.lineAt(i).range) + '\n';
+         }
       }
 
-      let newText = figlet.textSync(text, {
-         font: 'Big Money-sw',
-      });
+      let textLeadingSpaceLength = Number.MAX_SAFE_INTEGER;
+      text = text.split('\n')
+         .map((line: string) => {
+            if (line.trim().length > 0) {
+               textLeadingSpaceLength = Math.min(textLeadingSpaceLength, line.search(/\S/));
+            }
+            return line;
+         })
+         .map((line: string) => line.substr(textLeadingSpaceLength))
+         .join('\n');
+
+      const leadingSpaces = ' '.repeat(textLeadingSpaceLength);
+
+      let newText = enlarge ? figlet.textSync(text, { font }) : text;
 
       let commentLength = 0;
       newText = newText.split('\n').filter((line: string) => {
@@ -47,12 +72,17 @@ export function activate(context: vscode.ExtensionContext) {
          case 'swift':
          case 'typescript':
             addComment = (text: string) => {
-               let ret = '/'.repeat(commentLength + 6) + '\n';
+               let ret = leadingSpaces + '/'.repeat(commentLength + 6 + paddingLeft + paddingRight) + '\n';
+               for (let i = 0; i < paddingTop; ++i) {
+                  ret += leadingSpaces + '//' + ' '.repeat(commentLength + 2 + paddingLeft + paddingRight) + '//\n';
+               }
                text.split('\n').map((line: string) => {
-                  ret += '// ' + line + ' //\n';
+                  ret += leadingSpaces + '// ' + paddingLeftSpaces + line + paddingRightSpaces + ' //\n';
                });
-               ret += '//' + ' '.repeat(commentLength + 2) + '//\n';
-               ret += '/'.repeat(commentLength + 6) + '\n';
+               for (let i = 0; i < paddingBottom + 1; ++i) {
+                  ret += leadingSpaces + '//' + ' '.repeat(commentLength + 2 + paddingLeft + paddingRight) + '//\n';
+               }
+               ret += leadingSpaces + '/'.repeat(commentLength + 6 + paddingLeft + paddingRight) + '\n';
                return ret;
             }
             break;
@@ -68,12 +98,17 @@ export function activate(context: vscode.ExtensionContext) {
          case 'yaml':
          case 'ruby':
             addComment = (text: string) => {
-               let ret = '#'.repeat(commentLength + 4) + '\n';
+               let ret = leadingSpaces + '#'.repeat(commentLength + 4 + paddingLeft + paddingRight) + '\n';
+               for (let i = 0; i < paddingTop; ++i) {
+                  ret += leadingSpaces + '#' + ' '.repeat(commentLength + 2 + paddingLeft + paddingRight) + '#\n';
+               }
                text.split('\n').map((line: string) => {
-                  ret += '# ' + line + ' #\n';
+                  ret += leadingSpaces + '# ' + paddingLeftSpaces + line + paddingRightSpaces + ' #\n';
                });
-               ret += '#' + ' '.repeat(commentLength + 2) + '#\n';
-               ret += '#'.repeat(commentLength + 4) + '\n';
+               for (let i = 0; i < paddingBottom + 1; ++i) {
+                  ret += leadingSpaces + '#' + ' '.repeat(commentLength + 2 + paddingLeft + paddingRight) + '#\n';
+               }
+               ret += leadingSpaces + '#'.repeat(commentLength + 4 + paddingLeft + paddingRight) + '\n';
                return ret;
             }
             break;
@@ -81,12 +116,17 @@ export function activate(context: vscode.ExtensionContext) {
          case 'markdown':
          case 'xml':
             addComment = (text: string) => {
-               let ret = '<!-- ' + '-'.repeat(commentLength) + '\n';
+               let ret = leadingSpaces + '<!-- ' + '-'.repeat(commentLength + paddingLeft + paddingRight) + '\n';
+               for (let i = 0; i < paddingTop; ++i) {
+                  ret += leadingSpaces + ' -' + ' '.repeat(commentLength + 2 + paddingLeft + paddingRight) + '-\n';
+               }
                text.split('\n').map((line: string) => {
-                  ret += ' - ' + line + ' -\n';
+                  ret += leadingSpaces + ' - ' + paddingLeftSpaces + line + paddingRightSpaces + ' -\n';
                });
-               ret += ' -' + ' '.repeat(commentLength + 2) + '-\n';
-               ret += ' ' + '-'.repeat(commentLength) + ' -->\n';
+               for (let i = 0; i < paddingBottom + 1; ++i) {
+                  ret += leadingSpaces + ' -' + ' '.repeat(commentLength + 2 + paddingLeft + paddingRight) + '-\n';
+               }
+               ret += leadingSpaces + ' ' + '-'.repeat(commentLength + paddingLeft + paddingRight) + ' -->\n';
                return ret;
             }
             break;
@@ -94,23 +134,33 @@ export function activate(context: vscode.ExtensionContext) {
          case 'scss':
          case 'sass':
             addComment = (text: string) => {
-               let ret = '/*' + '*'.repeat(commentLength + 3) + '\n';
+               let ret = leadingSpaces + '/*' + '*'.repeat(commentLength + 3 + paddingLeft + paddingRight) + '\n';
+               for (let i = 0; i < paddingTop; ++i) {
+                  ret += leadingSpaces + ' *' + ' '.repeat(commentLength + 2 + paddingLeft + paddingRight) + '*\n';
+               }
                text.split('\n').map((line: string) => {
-                  ret += ' * ' + line + ' *\n';
+                  ret += leadingSpaces + ' * ' + paddingLeftSpaces + line + paddingRightSpaces + ' *\n';
                });
-               ret += ' *' + ' '.repeat(commentLength + 2) + '*\n';
-               ret += ' ' + '*'.repeat(commentLength + 4) + '/\n';
+               for (let i = 0; i < paddingBottom + 1; ++i) {
+                  ret += leadingSpaces + ' *' + ' '.repeat(commentLength + 2 + paddingLeft + paddingRight) + '*\n';
+               }
+               ret += leadingSpaces + ' ' + '*'.repeat(commentLength + 4 + paddingLeft + paddingRight) + '/\n';
                return ret;
             }
             break;
          case 'sql':
             addComment = (text: string) => {
-               let ret = '-'.repeat(commentLength + 6) + '\n';
+               let ret = leadingSpaces + '-'.repeat(commentLength + 6 + paddingLeft + paddingRight) + '\n';
+               for (let i = 0; i < paddingTop; ++i) {
+                  ret += leadingSpaces + '--' + ' '.repeat(commentLength + 2 + paddingLeft + paddingRight) + '--\n';
+               }
                text.split('\n').map((line: string) => {
-                  ret += '-- ' + line + ' --\n';
+                  ret += leadingSpaces + '-- ' + paddingLeftSpaces + line + paddingRightSpaces + ' --\n';
                });
-               ret += '--' + ' '.repeat(commentLength + 2) + '--\n';
-               ret += '-'.repeat(commentLength + 6) + '\n';
+               for (let i = 0; i < paddingBottom + 1; ++i) {
+                  ret += leadingSpaces + '--' + ' '.repeat(commentLength + 2 + paddingLeft + paddingRight) + '--\n';
+               }
+               ret += leadingSpaces + '-'.repeat(commentLength + 6 + paddingLeft + paddingRight) + '\n';
                return ret;
             }
             break;
