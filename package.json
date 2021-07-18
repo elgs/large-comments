@@ -11,11 +11,16 @@
       "Snippets"
    ],
    "activationEvents": [
-      "onCommand:large-comments.large-comments"
+      "onCommand:large-comments.large-comments",
+      "onCommand:large-comments.boxed-comments"
    ],
    "main": "./out/extension.js",
    "contributes": {
       "commands": [
+         {
+            "command": "large-comments.boxed-comments",
+            "title": "Generate boxed comments"
+         },
          {
             "command": "large-comments.large-comments",
             "title": "Generate large comments"
@@ -23,9 +28,14 @@
       ],
       "keybindings": [
          {
-            "command": "large-comments.large-comments",
+            "command": "large-comments.boxed-comments",
             "key": "ctrl+alt+/",
             "mac": "cmd+alt+/"
+         },
+         {
+            "command": "large-comments.large-comments",
+            "key": "ctrl+alt+shift+/",
+            "mac": "cmd+alt+shift+/"
          }
       ]
    },

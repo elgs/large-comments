@@ -1,19 +1,22 @@
 import * as vscode from 'vscode';
 const figlet = require('figlet');
 
-const enlarge = true;
 const font = 'Big Money-sw';
 const paddingLeft = 0;
 const paddingRight = 0;
 const paddingTop = 0;
-const paddingBottom = 0;
+let paddingBottom = 0;
 
 export function activate(context: vscode.ExtensionContext) {
 
    const paddingLeftSpaces = ' '.repeat(paddingLeft);
    const paddingRightSpaces = ' '.repeat(paddingRight);
 
-   let disposable = vscode.commands.registerCommand('large-comments.large-comments', () => {
+   const generateComments = (enlarge: boolean) => {
+
+      if (enlarge) {
+         ++paddingBottom;
+      }
 
       const editor = vscode.window.activeTextEditor;
 
@@ -52,7 +55,7 @@ export function activate(context: vscode.ExtensionContext) {
       let commentLength = 0;
       newText = newText.split('\n').filter((line: string) => {
          if (line.trim().length > 0) {
-            commentLength = line.length;
+            commentLength = Math.max(commentLength, line.length);
          }
          return line.trim().length;
       }).join('\n');
@@ -79,7 +82,7 @@ export function activate(context: vscode.ExtensionContext) {
                text.split('\n').map((line: string) => {
                   ret += leadingSpaces + '// ' + paddingLeftSpaces + line + paddingRightSpaces + ' //\n';
                });
-               for (let i = 0; i < paddingBottom + 1; ++i) {
+               for (let i = 0; i < paddingBottom; ++i) {
                   ret += leadingSpaces + '//' + ' '.repeat(commentLength + 2 + paddingLeft + paddingRight) + '//\n';
                }
                ret += leadingSpaces + '/'.repeat(commentLength + 6 + paddingLeft + paddingRight) + '\n';
@@ -105,7 +108,7 @@ export function activate(context: vscode.ExtensionContext) {
                text.split('\n').map((line: string) => {
                   ret += leadingSpaces + '# ' + paddingLeftSpaces + line + paddingRightSpaces + ' #\n';
                });
-               for (let i = 0; i < paddingBottom + 1; ++i) {
+               for (let i = 0; i < paddingBottom; ++i) {
                   ret += leadingSpaces + '#' + ' '.repeat(commentLength + 2 + paddingLeft + paddingRight) + '#\n';
                }
                ret += leadingSpaces + '#'.repeat(commentLength + 4 + paddingLeft + paddingRight) + '\n';
@@ -123,7 +126,7 @@ export function activate(context: vscode.ExtensionContext) {
                text.split('\n').map((line: string) => {
                   ret += leadingSpaces + ' - ' + paddingLeftSpaces + line + paddingRightSpaces + ' -\n';
                });
-               for (let i = 0; i < paddingBottom + 1; ++i) {
+               for (let i = 0; i < paddingBottom; ++i) {
                   ret += leadingSpaces + ' -' + ' '.repeat(commentLength + 2 + paddingLeft + paddingRight) + '-\n';
                }
                ret += leadingSpaces + ' ' + '-'.repeat(commentLength + paddingLeft + paddingRight) + ' -->\n';
@@ -141,7 +144,7 @@ export function activate(context: vscode.ExtensionContext) {
                text.split('\n').map((line: string) => {
                   ret += leadingSpaces + ' * ' + paddingLeftSpaces + line + paddingRightSpaces + ' *\n';
                });
-               for (let i = 0; i < paddingBottom + 1; ++i) {
+               for (let i = 0; i < paddingBottom; ++i) {
                   ret += leadingSpaces + ' *' + ' '.repeat(commentLength + 2 + paddingLeft + paddingRight) + '*\n';
                }
                ret += leadingSpaces + ' ' + '*'.repeat(commentLength + 4 + paddingLeft + paddingRight) + '/\n';
@@ -157,7 +160,7 @@ export function activate(context: vscode.ExtensionContext) {
                text.split('\n').map((line: string) => {
                   ret += leadingSpaces + '-- ' + paddingLeftSpaces + line + paddingRightSpaces + ' --\n';
                });
-               for (let i = 0; i < paddingBottom + 1; ++i) {
+               for (let i = 0; i < paddingBottom; ++i) {
                   ret += leadingSpaces + '--' + ' '.repeat(commentLength + 2 + paddingLeft + paddingRight) + '--\n';
                }
                ret += leadingSpaces + '-'.repeat(commentLength + 6 + paddingLeft + paddingRight) + '\n';
@@ -174,9 +177,10 @@ export function activate(context: vscode.ExtensionContext) {
          editBuilder.replace(selection, newText);
       });
 
-   });
+   };
 
-   context.subscriptions.push(disposable);
+   context.subscriptions.push(vscode.commands.registerCommand('large-comments.large-comments', () => generateComments(true)));
+   context.subscriptions.push(vscode.commands.registerCommand('large-comments.boxed-comments', () => generateComments(false)));
 }
 
 export function deactivate() { }
