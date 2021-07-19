@@ -4,10 +4,11 @@ A VS Code extension that generates large blocked comments.
 
 ### Demo
 
-![Demo](https://raw.githubusercontent.com/elgs/large-comments/master/images/demo.gif)
+![Demo](https://raw.githubusercontent.com/elgs/large-comments/master/images/demo_boxed_comments.gif)
 
+![Demo](https://raw.githubusercontent.com/elgs/large-comments/master/images/demo_ascii_comments.gif)
 ### Shortcuts (Mac)
-#### Generate blocked comments
+#### Generate boxed comments
 <kbd>Cmd</kbd> + <kbd>Ctrl</kbd> + <kbd>/</kbd>
 
 #### Generate ascii comments
@@ -15,7 +16,7 @@ A VS Code extension that generates large blocked comments.
 
 ### Shortcuts (PC)
 
-#### Generate blocked comments
+#### Generate boxed comments
 <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>/</kbd>
 
 #### Generate ascii comments
