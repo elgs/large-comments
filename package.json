@@ -2,7 +2,7 @@
    "name": "large-comments",
    "displayName": "Large Comments",
    "description": "Large comments generator",
-   "version": "0.0.8",
+   "version": "0.0.9",
    "engines": {
       "vscode": "^1.58.1"
    },
