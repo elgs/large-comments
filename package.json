@@ -2,7 +2,7 @@
    "name": "large-comments",
    "displayName": "Large Comments",
    "description": "Large comments generator",
-   "version": "0.0.7",
+   "version": "0.0.8",
    "engines": {
       "vscode": "^1.58.1"
    },
@@ -30,7 +30,7 @@
          {
             "command": "large-comments.boxed-comments",
             "key": "ctrl+alt+/",
-            "mac": "cmd+alt+/"
+            "mac": "cmd+ctrl+/"
          },
          {
             "command": "large-comments.large-comments",
