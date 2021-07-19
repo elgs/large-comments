@@ -14,12 +14,19 @@ export function activate(context: vscode.ExtensionContext) {
       let defaultPaddingTop = config.paddings.top;
       let defaultPaddingBottom = config.paddings.bottom;
 
+      if (enlarge) {
+         ++defaultPaddingBottom;
+      } else {
+         ++defaultPaddingTop;
+         ++defaultPaddingBottom;
+         defaultPaddingLeft += 3;
+         defaultPaddingRight += 3;
+      }
+
       const paddingLeftSpaces = ' '.repeat(defaultPaddingLeft);
       const paddingRightSpaces = ' '.repeat(defaultPaddingRight);
 
-      if (enlarge) {
-         ++defaultPaddingBottom;
-      }
+
 
       const editor = vscode.window.activeTextEditor;
 
@@ -182,7 +189,7 @@ export function activate(context: vscode.ExtensionContext) {
 
    };
 
-   context.subscriptions.push(vscode.commands.registerCommand('large-comments.large-comments', () => generateComments(true)));
+   context.subscriptions.push(vscode.commands.registerCommand('large-comments.ascii-comments', () => generateComments(true)));
    context.subscriptions.push(vscode.commands.registerCommand('large-comments.boxed-comments', () => generateComments(false)));
 }
 
