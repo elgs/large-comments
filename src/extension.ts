@@ -95,7 +95,7 @@ export function activate(context: vscode.ExtensionContext) {
                for (let i = 0; i < defaultPaddingBottom; ++i) {
                   ret += leadingSpaces + '//' + ' '.repeat(commentLength + 2 + defaultPaddingLeft + defaultPaddingRight) + '//\n';
                }
-               ret += leadingSpaces + '/'.repeat(commentLength + 6 + defaultPaddingLeft + defaultPaddingRight) + '\n';
+               ret += leadingSpaces + '/'.repeat(commentLength + 6 + defaultPaddingLeft + defaultPaddingRight);
                return ret;
             }
             break;
@@ -121,7 +121,7 @@ export function activate(context: vscode.ExtensionContext) {
                for (let i = 0; i < defaultPaddingBottom; ++i) {
                   ret += leadingSpaces + '#' + ' '.repeat(commentLength + 2 + defaultPaddingLeft + defaultPaddingRight) + '#\n';
                }
-               ret += leadingSpaces + '#'.repeat(commentLength + 4 + defaultPaddingLeft + defaultPaddingRight) + '\n';
+               ret += leadingSpaces + '#'.repeat(commentLength + 4 + defaultPaddingLeft + defaultPaddingRight);
                return ret;
             }
             break;
@@ -139,7 +139,7 @@ export function activate(context: vscode.ExtensionContext) {
                for (let i = 0; i < defaultPaddingBottom; ++i) {
                   ret += leadingSpaces + ' -' + ' '.repeat(commentLength + 2 + defaultPaddingLeft + defaultPaddingRight) + '-\n';
                }
-               ret += leadingSpaces + ' ' + '-'.repeat(commentLength + defaultPaddingLeft + defaultPaddingRight) + ' -->\n';
+               ret += leadingSpaces + ' ' + '-'.repeat(commentLength + defaultPaddingLeft + defaultPaddingRight) + ' -->';
                return ret;
             }
             break;
@@ -157,7 +157,7 @@ export function activate(context: vscode.ExtensionContext) {
                for (let i = 0; i < defaultPaddingBottom; ++i) {
                   ret += leadingSpaces + ' *' + ' '.repeat(commentLength + 2 + defaultPaddingLeft + defaultPaddingRight) + '*\n';
                }
-               ret += leadingSpaces + ' ' + '*'.repeat(commentLength + 4 + defaultPaddingLeft + defaultPaddingRight) + '/\n';
+               ret += leadingSpaces + ' ' + '*'.repeat(commentLength + 4 + defaultPaddingLeft + defaultPaddingRight) + '/';
                return ret;
             }
             break;
@@ -173,7 +173,7 @@ export function activate(context: vscode.ExtensionContext) {
                for (let i = 0; i < defaultPaddingBottom; ++i) {
                   ret += leadingSpaces + '--' + ' '.repeat(commentLength + 2 + defaultPaddingLeft + defaultPaddingRight) + '--\n';
                }
-               ret += leadingSpaces + '-'.repeat(commentLength + 6 + defaultPaddingLeft + defaultPaddingRight) + '\n';
+               ret += leadingSpaces + '-'.repeat(commentLength + 6 + defaultPaddingLeft + defaultPaddingRight);
                return ret;
             }
             break;

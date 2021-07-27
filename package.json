@@ -2,7 +2,7 @@
    "name": "large-comments",
    "displayName": "Large Comments",
    "description": "Large comments generator",
-   "version": "0.0.9",
+   "version": "0.1.0",
    "engines": {
       "vscode": "^1.58.1"
    },
@@ -377,17 +377,17 @@
    },
    "devDependencies": {
       "@types/glob": "^7.1.4",
-      "@types/mocha": "^8.2.3",
+      "@types/mocha": "^9.0.0",
       "@types/node": "16.x",
       "@types/vscode": "^1.58.1",
-      "@typescript-eslint/eslint-plugin": "^4.28.3",
-      "@typescript-eslint/parser": "^4.28.3",
-      "esbuild": "^0.12.15",
+      "@typescript-eslint/eslint-plugin": "^4.28.5",
+      "@typescript-eslint/parser": "^4.28.5",
+      "esbuild": "^0.12.16",
       "eslint": "^7.31.0",
       "glob": "^7.1.7",
-      "mocha": "^9.0.2",
+      "mocha": "^9.0.3",
       "typescript": "^4.3.5",
-      "vscode-test": "^1.5.2"
+      "vscode-test": "^1.6.1"
    },
    "dependencies": {
       "figlet": "^1.5.0"
