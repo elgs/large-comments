@@ -9,22 +9,23 @@ export function activate(context: vscode.ExtensionContext) {
       const config = vscode.workspace.getConfiguration('largeComments');
 
       const font = config.font;
-      let defaultPaddingLeft = config.paddings.left;
-      let defaultPaddingRight = config.paddings.right;
-      let defaultPaddingTop = config.paddings.top;
-      let defaultPaddingBottom = config.paddings.bottom;
+      const minWidth = config.minWidth;
+      let paddingLeft = config.paddings.left;
+      let paddingRight = config.paddings.right;
+      let paddingTop = config.paddings.top;
+      let paddingBottom = config.paddings.bottom;
 
       if (enlarge) {
-         ++defaultPaddingBottom;
+         ++paddingBottom;
       } else {
-         ++defaultPaddingTop;
-         ++defaultPaddingBottom;
-         defaultPaddingLeft += 3;
-         defaultPaddingRight += 3;
+         ++paddingTop;
+         ++paddingBottom;
+         paddingLeft += 3;
+         paddingRight += 3;
       }
 
-      const paddingLeftSpaces = ' '.repeat(defaultPaddingLeft);
-      const paddingRightSpaces = ' '.repeat(defaultPaddingRight);
+      const paddingLeftSpaces = ' '.repeat(paddingLeft);
+      const paddingRightSpaces = ' '.repeat(paddingRight);
 
 
 
@@ -85,17 +86,21 @@ export function activate(context: vscode.ExtensionContext) {
          case 'swift':
          case 'typescript':
             addComment = (text: string) => {
-               let ret = leadingSpaces + '/'.repeat(commentLength + 6 + defaultPaddingLeft + defaultPaddingRight) + '\n';
-               for (let i = 0; i < defaultPaddingTop; ++i) {
-                  ret += leadingSpaces + '//' + ' '.repeat(commentLength + 2 + defaultPaddingLeft + defaultPaddingRight) + '//\n';
+               let fillingSize = minWidth - (commentLength + 6 + paddingLeft + paddingRight);
+               fillingSize = fillingSize >= 0 ? Math.floor(fillingSize / 2) : 0;
+               const fillingSpaces = ' '.repeat(fillingSize);
+
+               let ret = leadingSpaces + '/'.repeat(commentLength + 6 + paddingLeft + paddingRight + fillingSize * 2) + '\n';
+               for (let i = 0; i < paddingTop; ++i) {
+                  ret += leadingSpaces + '//' + ' '.repeat(commentLength + 2 + paddingLeft + paddingRight + fillingSize * 2) + '//\n';
                }
                text.split('\n').map((line: string) => {
-                  ret += leadingSpaces + '// ' + paddingLeftSpaces + line + paddingRightSpaces + ' //\n';
+                  ret += leadingSpaces + '// ' + paddingLeftSpaces + fillingSpaces + line + fillingSpaces + paddingRightSpaces + ' //\n';
                });
-               for (let i = 0; i < defaultPaddingBottom; ++i) {
-                  ret += leadingSpaces + '//' + ' '.repeat(commentLength + 2 + defaultPaddingLeft + defaultPaddingRight) + '//\n';
+               for (let i = 0; i < paddingBottom; ++i) {
+                  ret += leadingSpaces + '//' + ' '.repeat(commentLength + 2 + paddingLeft + paddingRight + fillingSize * 2) + '//\n';
                }
-               ret += leadingSpaces + '/'.repeat(commentLength + 6 + defaultPaddingLeft + defaultPaddingRight);
+               ret += leadingSpaces + '/'.repeat(commentLength + 6 + paddingLeft + paddingRight + fillingSize * 2);
                return ret;
             }
             break;
@@ -111,17 +116,21 @@ export function activate(context: vscode.ExtensionContext) {
          case 'yaml':
          case 'ruby':
             addComment = (text: string) => {
-               let ret = leadingSpaces + '#'.repeat(commentLength + 4 + defaultPaddingLeft + defaultPaddingRight) + '\n';
-               for (let i = 0; i < defaultPaddingTop; ++i) {
-                  ret += leadingSpaces + '#' + ' '.repeat(commentLength + 2 + defaultPaddingLeft + defaultPaddingRight) + '#\n';
+               let fillingSize = minWidth - (commentLength + 4 + paddingLeft + paddingRight);
+               fillingSize = fillingSize >= 0 ? Math.floor(fillingSize / 2) : 0;
+               const fillingSpaces = ' '.repeat(fillingSize);
+
+               let ret = leadingSpaces + '#'.repeat(commentLength + 4 + paddingLeft + paddingRight + fillingSize * 2) + '\n';
+               for (let i = 0; i < paddingTop; ++i) {
+                  ret += leadingSpaces + '#' + ' '.repeat(commentLength + 2 + paddingLeft + paddingRight + fillingSize * 2) + '#\n';
                }
                text.split('\n').map((line: string) => {
-                  ret += leadingSpaces + '# ' + paddingLeftSpaces + line + paddingRightSpaces + ' #\n';
+                  ret += leadingSpaces + '# ' + paddingLeftSpaces + fillingSpaces + line + fillingSpaces + paddingRightSpaces + ' #\n';
                });
-               for (let i = 0; i < defaultPaddingBottom; ++i) {
-                  ret += leadingSpaces + '#' + ' '.repeat(commentLength + 2 + defaultPaddingLeft + defaultPaddingRight) + '#\n';
+               for (let i = 0; i < paddingBottom; ++i) {
+                  ret += leadingSpaces + '#' + ' '.repeat(commentLength + 2 + paddingLeft + paddingRight + fillingSize * 2) + '#\n';
                }
-               ret += leadingSpaces + '#'.repeat(commentLength + 4 + defaultPaddingLeft + defaultPaddingRight);
+               ret += leadingSpaces + '#'.repeat(commentLength + 4 + paddingLeft + paddingRight + fillingSize * 2);
                return ret;
             }
             break;
@@ -129,17 +138,21 @@ export function activate(context: vscode.ExtensionContext) {
          case 'markdown':
          case 'xml':
             addComment = (text: string) => {
-               let ret = leadingSpaces + '<!-- ' + '-'.repeat(commentLength + defaultPaddingLeft + defaultPaddingRight) + '\n';
-               for (let i = 0; i < defaultPaddingTop; ++i) {
-                  ret += leadingSpaces + ' -' + ' '.repeat(commentLength + 2 + defaultPaddingLeft + defaultPaddingRight) + '-\n';
+               let fillingSize = minWidth - (5 + commentLength + paddingLeft + paddingRight);
+               fillingSize = fillingSize >= 0 ? Math.floor(fillingSize / 2) : 0;
+               const fillingSpaces = ' '.repeat(fillingSize);
+
+               let ret = leadingSpaces + '<!-- ' + '-'.repeat(commentLength + paddingLeft + paddingRight + fillingSize * 2) + '\n';
+               for (let i = 0; i < paddingTop; ++i) {
+                  ret += leadingSpaces + '-' + ' '.repeat(commentLength + 3 + paddingLeft + paddingRight + fillingSize * 2) + '-\n';
                }
                text.split('\n').map((line: string) => {
-                  ret += leadingSpaces + ' - ' + paddingLeftSpaces + line + paddingRightSpaces + ' -\n';
+                  ret += leadingSpaces + '- ' + paddingLeftSpaces + fillingSpaces + line + fillingSpaces + paddingRightSpaces + '  -\n';
                });
-               for (let i = 0; i < defaultPaddingBottom; ++i) {
-                  ret += leadingSpaces + ' -' + ' '.repeat(commentLength + 2 + defaultPaddingLeft + defaultPaddingRight) + '-\n';
+               for (let i = 0; i < paddingBottom; ++i) {
+                  ret += leadingSpaces + '-' + ' '.repeat(commentLength + 3 + paddingLeft + paddingRight + fillingSize * 2) + '-\n';
                }
-               ret += leadingSpaces + ' ' + '-'.repeat(commentLength + defaultPaddingLeft + defaultPaddingRight) + ' -->';
+               ret += leadingSpaces + '-'.repeat(commentLength + 1 + paddingLeft + paddingRight + fillingSize * 2) + ' -->';
                return ret;
             }
             break;
@@ -147,33 +160,41 @@ export function activate(context: vscode.ExtensionContext) {
          case 'scss':
          case 'sass':
             addComment = (text: string) => {
-               let ret = leadingSpaces + '/*' + '*'.repeat(commentLength + 3 + defaultPaddingLeft + defaultPaddingRight) + '\n';
-               for (let i = 0; i < defaultPaddingTop; ++i) {
-                  ret += leadingSpaces + ' *' + ' '.repeat(commentLength + 2 + defaultPaddingLeft + defaultPaddingRight) + '*\n';
+               let fillingSize = minWidth - (4 + commentLength + paddingLeft + paddingRight);
+               fillingSize = fillingSize >= 0 ? Math.floor(fillingSize / 2) : 0;
+               const fillingSpaces = ' '.repeat(fillingSize);
+
+               let ret = leadingSpaces + '/* ' + '*'.repeat(commentLength + 1 + paddingLeft + paddingRight + fillingSize * 2) + '\n';
+               for (let i = 0; i < paddingTop; ++i) {
+                  ret += leadingSpaces + '*' + ' '.repeat(commentLength + 2 + paddingLeft + paddingRight + fillingSize * 2) + '*\n';
                }
                text.split('\n').map((line: string) => {
-                  ret += leadingSpaces + ' * ' + paddingLeftSpaces + line + paddingRightSpaces + ' *\n';
+                  ret += leadingSpaces + '* ' + paddingLeftSpaces + fillingSpaces + line + fillingSpaces + paddingRightSpaces + ' *\n';
                });
-               for (let i = 0; i < defaultPaddingBottom; ++i) {
-                  ret += leadingSpaces + ' *' + ' '.repeat(commentLength + 2 + defaultPaddingLeft + defaultPaddingRight) + '*\n';
+               for (let i = 0; i < paddingBottom; ++i) {
+                  ret += leadingSpaces + '*' + ' '.repeat(commentLength + 2 + paddingLeft + paddingRight + fillingSize * 2) + '*\n';
                }
-               ret += leadingSpaces + ' ' + '*'.repeat(commentLength + 4 + defaultPaddingLeft + defaultPaddingRight) + '/';
+               ret += leadingSpaces + '*'.repeat(commentLength + 1 + paddingLeft + paddingRight + fillingSize * 2) + ' */';
                return ret;
             }
             break;
          case 'sql':
             addComment = (text: string) => {
-               let ret = leadingSpaces + '-'.repeat(commentLength + 6 + defaultPaddingLeft + defaultPaddingRight) + '\n';
-               for (let i = 0; i < defaultPaddingTop; ++i) {
-                  ret += leadingSpaces + '--' + ' '.repeat(commentLength + 2 + defaultPaddingLeft + defaultPaddingRight) + '--\n';
+               let fillingSize = minWidth - (commentLength + 6 + paddingLeft + paddingRight);
+               fillingSize = fillingSize >= 0 ? Math.floor(fillingSize / 2) : 0;
+               const fillingSpaces = ' '.repeat(fillingSize);
+
+               let ret = leadingSpaces + '-'.repeat(commentLength + 6 + paddingLeft + paddingRight + fillingSize * 2) + '\n';
+               for (let i = 0; i < paddingTop; ++i) {
+                  ret += leadingSpaces + '--' + ' '.repeat(commentLength + 2 + paddingLeft + paddingRight + fillingSize * 2) + '--\n';
                }
                text.split('\n').map((line: string) => {
-                  ret += leadingSpaces + '-- ' + paddingLeftSpaces + line + paddingRightSpaces + ' --\n';
+                  ret += leadingSpaces + '-- ' + paddingLeftSpaces + fillingSpaces + line + fillingSpaces + paddingRightSpaces + ' --\n';
                });
-               for (let i = 0; i < defaultPaddingBottom; ++i) {
-                  ret += leadingSpaces + '--' + ' '.repeat(commentLength + 2 + defaultPaddingLeft + defaultPaddingRight) + '--\n';
+               for (let i = 0; i < paddingBottom; ++i) {
+                  ret += leadingSpaces + '--' + ' '.repeat(commentLength + 2 + paddingLeft + paddingRight + fillingSize * 2) + '--\n';
                }
-               ret += leadingSpaces + '-'.repeat(commentLength + 6 + defaultPaddingLeft + defaultPaddingRight);
+               ret += leadingSpaces + '-'.repeat(commentLength + 6 + paddingLeft + paddingRight + fillingSize * 2);
                return ret;
             }
             break;

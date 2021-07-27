@@ -2,7 +2,7 @@
    "name": "large-comments",
    "displayName": "Large Comments",
    "description": "Large comments generator",
-   "version": "0.1.0",
+   "version": "0.1.1",
    "engines": {
       "vscode": "^1.58.1"
    },
@@ -50,6 +50,11 @@
                   "left": 0
                },
                "description": "Paddings for the comment box."
+            },
+            "largeComments.minWidth": {
+               "type": "number",
+               "default": 0,
+               "description": "Minimum width of the comment block."
             },
             "largeComments.font": {
                "type": "string",
